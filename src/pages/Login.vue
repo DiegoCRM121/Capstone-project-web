@@ -13,7 +13,7 @@
           <q-card-section>
             <div class="q-pt-lg">
               <div class="col text-h6 ellipsis flex justify-center">
-                <h2 class="text-h2 text-uppercase q-my-none text-weight-regular">Login</h2>
+                <h2 class="text-h2 text-uppercase q-my-none text-weight-regular">Access</h2>
               </div>
             </div>
           </q-card-section>
@@ -23,9 +23,9 @@
               <q-input label="Password" type="password" v-model="login.password"></q-input>
               <div>
                 <q-btn class="full-width" color="primary" label="Login" type="submit" rounded></q-btn>
-                <div class="text-center q-mt-sm q-gutter-lg">
-                  Don't have an account?<a href="#" class="text-white" @click="toggleRegistration">Create account</a>
-                </div>
+              </div>
+              <div class="text-center q-mt-sm q-gutter-lg">
+                Don't have an account?<a href="#/login" class="text-white" @click="toggleRegistration">Create account</a> 
               </div>
             </q-form>
           </q-card-section>
@@ -37,7 +37,7 @@
           <q-card-section>
             <div class="q-pt-lg">
               <div class="col text-h6 ellipsis flex justify-center">
-                <h2 class="text-h2 text-uppercase q-my-none text-weight-regular">Registration</h2>
+                <h3 class="text-h3 text-uppercase q-my-none text-weight-regular">Registration</h3>
               </div>
             </div>
           </q-card-section>
@@ -49,7 +49,7 @@
               <div>
                 <q-btn class="full-width" color="primary" label="Register" type="submit" rounded></q-btn>
                 <div class="text-center q-mt-sm q-gutter-lg">
-                  Already have an account?<a href="#" class="text-white" @click="toggleRegistration">Login</a>
+                  Already have an account?<a href="#/login" class="text-white" @click="toggleRegistration">Login</a>
                 </div>
               </div>
             </q-form>
@@ -71,13 +71,13 @@
       return {
         showLogin: true,
         login: {
-          email: 'abc@gmail.com',
-          password: 'abcde'
+          email: '',
+          password: ''
         },
         register: {
-          username: 'Diego',
-          email: 'abc@gmail.com',
-          password: 'abcde'
+          username: '',
+          email: '',
+          password: ''
         }
       }
     },
@@ -86,19 +86,26 @@
         if (!this.login.email || !this.login.password) {
           $q.notify({
             type: 'negative',
-            message: 'Los datos ingresados son inválidos.'
-          })
-        } else if (this.login.password.length < 6) {
-          $q.notify({
-            type: 'negative',
-            message: 'La contraseña debe tener 6 o más caracteres.'
+            message: 'Debe completar todas las casillas.'
           })
         } else {
           console.log('login')
         }
       },
       submitRegistration () {
-        console.log('registrated')
+        if (!this.register.username || !this.register.email || !this.register.password) {
+          $q.notify({
+            type: 'negative',
+            message: 'Debe completar todas las casillas.'
+          })
+        } else if (this.register.password.length < 4) {
+          $q.notify({
+            type: 'negative',
+            message: 'La contraseña debe tener más de 4 caracteres.'
+          })
+        } else {
+          console.log('registrated')
+        }
       },
       toggleRegistration () {
         this.showLogin = !this.showLogin;
