@@ -4,7 +4,7 @@
         <q-uploader
           style="width: 100%;"
           url="http://localhost:4444/upload"
-          label="Restricted to images"
+          label="Send some images"
           multiple
           accept=".jpg, image/*"
           @rejected="onRejected"

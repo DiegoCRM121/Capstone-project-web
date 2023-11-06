@@ -13,7 +13,7 @@
           <q-card-section>
             <div class="q-pt-lg">
               <div class="col text-h6 ellipsis flex justify-center">
-                <h2 class="text-h2 text-uppercase q-my-none text-weight-regular">Login</h2>
+                <h2 class="text-h2 text-uppercase q-my-none text-weight-regular">Access</h2>
               </div>
             </div>
           </q-card-section>
@@ -23,9 +23,9 @@
               <q-input label="Password" type="password" v-model="login.password"></q-input>
               <div>
                 <q-btn class="full-width" color="primary" label="Login" type="submit" rounded></q-btn>
-                <div class="text-center q-mt-sm q-gutter-lg">
-                  Don't have an account?<a href="#" class="text-white" @click="toggleRegistration">Create account</a>
-                </div>
+              </div>
+              <div class="text-center q-mt-sm q-gutter-lg">
+                Don't have an account?<a href="#/login" class="text-white" @click="toggleRegistration">Create account</a> 
               </div>
             </q-form>
           </q-card-section>
@@ -37,7 +37,7 @@
           <q-card-section>
             <div class="q-pt-lg">
               <div class="col text-h6 ellipsis flex justify-center">
-                <h2 class="text-h2 text-uppercase q-my-none text-weight-regular">Registration</h2>
+                <h3 class="text-h3 text-uppercase q-my-none text-weight-regular">Registration</h3>
               </div>
             </div>
           </q-card-section>
@@ -61,7 +61,7 @@
               <div>
                 <q-btn class="full-width" color="primary" label="Register" type="submit" rounded></q-btn>
                 <div class="text-center q-mt-sm q-gutter-lg">
-                  Already have an account?<a href="#" class="text-white" @click="toggleRegistration">Login</a>
+                  Already have an account?<a href="#/login" class="text-white" @click="toggleRegistration">Login</a>
                 </div>
               </div>
             </q-form>
@@ -88,16 +88,9 @@
           password: ''
         },
         register: {
-          firstName: '',
-          secondName: '',
-          dateForm: {
-            birthDate: null,
-            event: ['2021/11/01', '2021/11/30']
-          },
-          country: '',
-          address: '',
-          email: '',
-          password: '',
+          username: 'Diego',
+          email: 'abc@gmail.com',
+          password: 'abcde'
         }
       }
     },
@@ -132,41 +125,20 @@
         if (this.register.password.length < 6) {
           this.$q.notify({
             type: 'negative',
-            message: 'La contraseña debe tener 6 o más caracteres'
+            message: 'Los datos ingresados son inválidos.'
           })
-        } else if (!this.register.firstName || !this.register.secondName || this.register.dateForm.birthDate == null || !this.register.country
-                  || !this.register.address || !this.register.email || !this.register.password) {
-          this.$q.notify({
+        } else if (this.login.password.length < 6) {
+          $q.notify({
             type: 'negative',
-            message: 'Debe rellenar todos los campos'
+            message: 'La contraseña debe tener 6 o más caracteres.'
           })
         } else {
-          var data = {
-            firstName: this.register.firstName,
-            secondName: this.register.secondName,
-            birthDate: formattedDate,
-            country: this.register.country,
-            address: this.register.address,
-            email: this.register.email,
-            password: this.register.password
-          }
-
-          axios.post(url, data)
-          .then(response => {
-            this.$q.notify({
-              type: 'positive',
-              message: 'Cuenta creada con éxito'
-            })
-            this.showLogin = !this.showLogin
-          }).catch(error => {
-            this.$q.notify({
-              type: 'negative',
-              message: 'Ocurrio un error intentando crear la cuenta'
-            })
-          })
+          console.log('login')
         }
       },
-
+      submitRegistration () {
+        console.log('registrated')
+      },
       toggleRegistration () {
         this.showLogin = !this.showLogin;
       }
