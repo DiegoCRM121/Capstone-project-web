@@ -6,10 +6,12 @@
     </div>
     <div v-bind:class="{'justify-center': $q.screen.md || $q.screen.sm || $q.screen.xs}" class="col-12 col-md-6 flex content-center">
       <q-card v-bind:style="$q.screen.lt.sm ? {'width': '80%'} : {'width': '50%'}">
-        <q-card-section v-if="showLogin">
+        <q-card-section>
           <q-avatar size="103px" class="absolute-center shadow-10">
             <img src="~assets/avatar.svg" alt="avatar">
           </q-avatar>
+        </q-card-section>
+        <q-card-section v-if="showLogin">
           <q-card-section>
             <div class="q-pt-lg">
               <div class="col text-h6 ellipsis flex justify-center">
@@ -31,9 +33,6 @@
           </q-card-section>
         </q-card-section>
         <q-card-section v-else>
-          <q-avatar size="103px" class="absolute-center shadow-10">
-            <img src="~assets/avatar.svg" alt="avatar">
-          </q-avatar>
           <q-card-section>
             <div class="q-pt-lg">
               <div class="col text-h6 ellipsis flex justify-center">
@@ -43,8 +42,8 @@
           </q-card-section>
           <q-card-section>
             <q-form class="q-gutter-md" @submit.prevent="submitRegistration">
-              <q-input label="First Name" v-model="register.username"></q-input>
-              <q-input label="Last Name" v-model="register.username"></q-input>
+              <q-input label="First Name" v-model="register.firsName"></q-input>
+              <q-input label="Last Name" v-model="register.secondName"></q-input>
               <q-input v-model="register.dateForm.birthDate" label="Date of Birth">
                 <template v-slot:append>
                   <q-icon name="event" class="cursor-pointer">
