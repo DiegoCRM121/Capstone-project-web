@@ -25,7 +25,7 @@
                 <q-btn class="full-width" color="primary" label="Login" type="submit" rounded></q-btn>
               </div>
               <div class="text-center q-mt-sm q-gutter-lg">
-                Don't have an account?<a href="#/login" class="text-white" @click="toggleRegistration">Create account</a> 
+                Don't have an account?<a href="#" class="text-white" @click="toggleRegistration">Create account</a> 
               </div>
             </q-form>
           </q-card-section>
@@ -44,7 +44,7 @@
           <q-card-section>
             <q-form class="q-gutter-md" @submit.prevent="submitRegistration">
               <q-input label="First Name" v-model="register.username"></q-input>
-              <q-input label="Second Name" v-model="register.username"></q-input>
+              <q-input label="Last Name" v-model="register.username"></q-input>
               <q-input v-model="register.dateForm.birthDate" label="Date of Birth">
                 <template v-slot:append>
                   <q-icon name="event" class="cursor-pointer">
@@ -61,7 +61,7 @@
               <div>
                 <q-btn class="full-width" color="primary" label="Register" type="submit" rounded></q-btn>
                 <div class="text-center q-mt-sm q-gutter-lg">
-                  Already have an account?<a href="#/login" class="text-white" @click="toggleRegistration">Login</a>
+                  Already have an account?<a href="#" class="text-white" @click="toggleRegistration">Login</a>
                 </div>
               </div>
             </q-form>
@@ -88,9 +88,16 @@
           password: ''
         },
         register: {
-          username: 'Diego',
-          email: 'abc@gmail.com',
-          password: 'abcde'
+          firsName: '',
+          secondName: '',
+          dateForm: {
+            birthDate: null,
+            event: ['2021/11/01', '2021/11/30']
+          },
+          country: '',
+          address: '',
+          email: '',
+          password: ''
         }
       }
     },
@@ -102,12 +109,8 @@
 
       submitLogin () {
         var url = "http://localhost:5081/api/Users/SignIn"
-        var data = {
-          email: this.login.email,
-          password: this.login.password
-        }
 
-        axios.post(url, data)
+        axios.post(url, this.login)
         .then(response => {
           localStorage.setItem("userData", JSON.stringify(response.data))
           this.$router.push("/main")
@@ -120,24 +123,44 @@
       },
 
       submitRegistration () {
-        var url = "http://localhost:5081/api/users/signup"
-        var formattedDate = this.formatFecha(this.register.dateForm.birthDate)
         if (this.register.password.length < 6) {
           this.$q.notify({
             type: 'negative',
-            message: 'Los datos ingresados son inválidos.'
-          })
-        } else if (this.login.password.length < 6) {
-          $q.notify({
-            type: 'negative',
             message: 'La contraseña debe tener 6 o más caracteres.'
           })
+        } else if (!this.register.firsName || !this.register.secondName || this.register.dateForm.birthDate == null || !this.register.country
+        || !this.register.address || !this.register.email || !this.register.password) {
+          $q.notify({
+            type: 'negative',
+            message: 'Debe rellenar todas las casillas.'
+          })
         } else {
-          console.log('login')
+          var url = "http://localhost:5081/api/users/signup"
+          var formattedDate = this.formatFecha(this.register.dateForm.birthDate)
+          var data = {
+            firsName: this.register.firsName,
+            secondName: this.register.secondName,
+            birthDate: formattedDate,
+            country: this.register.country,
+            address: this.register.address,
+            email: this.register.email,
+            password: this.register.password
+          }
+
+          axios.post(url, data)
+          .then(reponse => {
+            this.showLogin = !this.showLogin
+            this.$q.notify({
+              type: 'positive',
+              message: 'La cuenta se creó correctamente.'
+            })
+          }).catch(error => {
+            this.$q.notify({
+              type: 'negative',
+              message: 'Ha ocurrido un error al crear la cuenta.'
+            })
+          })
         }
-      },
-      submitRegistration () {
-        console.log('registrated')
       },
       toggleRegistration () {
         this.showLogin = !this.showLogin;
