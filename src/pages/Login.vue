@@ -43,7 +43,19 @@
           </q-card-section>
           <q-card-section>
             <q-form class="q-gutter-md" @submit.prevent="submitRegistration">
-              <q-input label="Username" v-model="register.username"></q-input>
+              <q-input label="First Name" v-model="register.username"></q-input>
+              <q-input label="Second Name" v-model="register.username"></q-input>
+              <q-input v-model="register.dateForm.birthDate" label="Date of Birth">
+                <template v-slot:append>
+                  <q-icon name="event" class="cursor-pointer">
+                    <q-popup-proxy transition-show="scale" transition-hide="scale">
+                      <q-date v-model="register.dateForm.birthDate" text-color="white" color="red" :events="register.dateForm.event" event-color="yellow" />
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
+              <q-input label="Country" v-model="register.country"></q-input>
+              <q-input label="Address" v-model="register.address"></q-input>
               <q-input label="Email" v-model="register.email"></q-input>
               <q-input label="Password" type="password" v-model="register.password"></q-input>
               <div>
@@ -62,6 +74,7 @@
   
   <script>
   import { useQuasar } from 'quasar'
+  import axios from 'axios'
   
   let $q
   
@@ -71,35 +84,89 @@
       return {
         showLogin: true,
         login: {
-          email: 'abc@gmail.com',
-          password: 'abcde'
+          email: '',
+          password: ''
         },
         register: {
-          username: 'Diego',
-          email: 'abc@gmail.com',
-          password: 'abcde'
+          firstName: '',
+          secondName: '',
+          dateForm: {
+            birthDate: null,
+            event: ['2021/11/01', '2021/11/30']
+          },
+          country: '',
+          address: '',
+          email: '',
+          password: '',
         }
       }
     },
     methods: {
+      formatFecha: function (fecha) {
+        const dateParts = fecha.split('/');
+            return dateParts[0] + '-' + dateParts[1] + '-' + dateParts[2];
+      },
+
       submitLogin () {
-        if (!this.login.email || !this.login.password) {
-          $q.notify({
+        var url = "http://localhost:5081/api/Users/SignIn"
+        var data = {
+          email: this.login.email,
+          password: this.login.password
+        }
+
+        axios.post(url, data)
+        .then(response => {
+          localStorage.setItem("userData", JSON.stringify(response.data))
+          this.$router.push("/main")
+        }).catch(error =>{
+          this.$q.notify({
             type: 'negative',
-            message: 'Los datos ingresados son inválidos.'
+            message: 'El usuario no existe'
           })
-        } else if (this.login.password.length < 6) {
-          $q.notify({
+        })
+      },
+
+      submitRegistration () {
+        var url = "http://localhost:5081/api/users/signup"
+        var formattedDate = this.formatFecha(this.register.dateForm.birthDate)
+        if (this.register.password.length < 6) {
+          this.$q.notify({
             type: 'negative',
-            message: 'La contraseña debe tener 6 o más caracteres.'
+            message: 'La contraseña debe tener 6 o más caracteres'
+          })
+        } else if (!this.register.firstName || !this.register.secondName || this.register.dateForm.birthDate == null || !this.register.country
+                  || !this.register.address || !this.register.email || !this.register.password) {
+          this.$q.notify({
+            type: 'negative',
+            message: 'Debe rellenar todos los campos'
           })
         } else {
-          console.log('login')
+          var data = {
+            firstName: this.register.firstName,
+            secondName: this.register.secondName,
+            birthDate: formattedDate,
+            country: this.register.country,
+            address: this.register.address,
+            email: this.register.email,
+            password: this.register.password
+          }
+
+          axios.post(url, data)
+          .then(response => {
+            this.$q.notify({
+              type: 'positive',
+              message: 'Cuenta creada con éxito'
+            })
+            this.showLogin = !this.showLogin
+          }).catch(error => {
+            this.$q.notify({
+              type: 'negative',
+              message: 'Ocurrio un error intentando crear la cuenta'
+            })
+          })
         }
       },
-      submitRegistration () {
-        console.log('registrated')
-      },
+
       toggleRegistration () {
         this.showLogin = !this.showLogin;
       }
