@@ -107,13 +107,16 @@
       },
 
       submitLogin () {
-        var url = "http://localhost:5081/api/Users/SignIn"
+        var url = "https://localhost:7206/api/User/SignIn"
+
+        console.log("login datos", this.login)
 
         axios.post(url, this.login)
         .then(response => {
           localStorage.setItem("userData", JSON.stringify(response.data))
           this.$router.push("/main")
         }).catch(error =>{
+          console.log(error)
           this.$q.notify({
             type: 'negative',
             message: 'El usuario no existe'
@@ -134,7 +137,7 @@
             message: 'Debe rellenar todas las casillas.'
           })
         } else {
-          var url = "http://localhost:5081/api/users/signup"
+          var url = "https://localhost:7206/api/User/SignUp"
           var formattedDate = this.formatFecha(this.register.dateForm.birthDate)
           var data = {
             firsName: this.register.firsName,
