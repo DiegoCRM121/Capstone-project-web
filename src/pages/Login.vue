@@ -42,7 +42,7 @@
           </q-card-section>
           <q-card-section>
             <q-form class="q-gutter-md" @submit.prevent="submitRegistration">
-              <q-input label="First Name" v-model="register.firsName"></q-input>
+              <q-input label="First Name" v-model="register.firstName"></q-input>
               <q-input label="Last Name" v-model="register.secondName"></q-input>
               <q-input v-model="register.dateForm.birthDate" label="Date of Birth">
                 <template v-slot:append>
@@ -87,7 +87,7 @@
           password: ''
         },
         register: {
-          firsName: '',
+          firstName: '',
           secondName: '',
           dateForm: {
             birthDate: null,
@@ -130,7 +130,7 @@
             type: 'negative',
             message: 'La contraseña debe tener 6 o más caracteres.'
           })
-        } else if (!this.register.firsName || !this.register.secondName || this.register.dateForm.birthDate == null || !this.register.country
+        } else if (!this.register.firstName || !this.register.secondName || this.register.dateForm.birthDate == null || !this.register.country
         || !this.register.address || !this.register.email || !this.register.password) {
           $q.notify({
             type: 'negative',
@@ -140,7 +140,7 @@
           var url = "https://localhost:7206/api/User/SignUp"
           var formattedDate = this.formatFecha(this.register.dateForm.birthDate)
           var data = {
-            firsName: this.register.firsName,
+            firstName: this.register.firstName,
             secondName: this.register.secondName,
             birthDate: formattedDate,
             country: this.register.country,
