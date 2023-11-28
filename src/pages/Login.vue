@@ -114,7 +114,7 @@
         axios.post(url, this.login)
         .then(response => {
           localStorage.setItem("userData", JSON.stringify(response.data))
-          this.$router.push("/detector")
+          this.$router.push("/main")
         }).catch(error =>{
           console.log(error)
           this.$q.notify({

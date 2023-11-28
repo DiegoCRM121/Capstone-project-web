@@ -63,6 +63,12 @@ const linksList = [
     link: 'https://github.com/quasarframework'
   },
   {
+    title: 'Emotion Detector',
+    caption: '@CapstoneProjectEsan',
+    icon: 'not_started',
+    link: 'http://127.0.0.1:5000'
+  },
+  {
     title: 'Discord Chat Channel',
     caption: 'chat.quasar.dev',
     icon: 'chat',
